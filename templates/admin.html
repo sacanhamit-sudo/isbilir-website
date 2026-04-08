@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli - İşbilir Tekstil</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=9">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧵</text></svg>">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <img src="/static/images/logo-dark.png" alt="İşbilir Tekstil" class="site-logo" >
+                
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" data-i18n="nav_home">Ana Sayfa</a></li>
+                <li><a href="/products" data-i18n="nav_products">Ürünler</a></li>
+                <li><a href="/admin" class="active" data-i18n="nav_admin">Yönetim</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="tr">TR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="de">DE</button>
+                </div>
+                <a href="#" id="nav-login" class="btn btn-primary btn-sm" data-i18n="nav_logout" onclick="logoutAdmin(event)">Çıkış</a>
+            </div>
+            <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <button class="menu-item active" data-section="dashboard">
+                <span class="icon">📊</span>
+                <span data-i18n="admin_dashboard">Kontrol Paneli</span>
+            </button>
+            <button class="menu-item" data-section="products">
+                <span class="icon">📦</span>
+                <span data-i18n="admin_products">Ürünler</span>
+            </button>
+            <button class="menu-item" data-section="categories">
+                <span class="icon">🏷️</span>
+                <span data-i18n="admin_categories">Kategoriler</span>
+            </button>
+            <button class="menu-item" data-section="settings">
+                <span class="icon">⚙️</span>
+                <span data-i18n="admin_settings">Ayarlar</span>
+            </button>
+        </aside>
+
+        <main class="admin-main">
+            <!-- Dashboard -->
+            <div id="section-dashboard" class="admin-section">
+                <div class="admin-header">
+                    <h1 data-i18n="admin_dashboard">Kontrol Paneli</h1>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📦</div>
+                        <div>
+                            <div class="stat-value" id="stat-products">0</div>
+                            <div class="stat-label" data-i18n="admin_total_products">Toplam Ürün</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon gold">🏷️</div>
+                        <div>
+                            <div class="stat-value" id="stat-categories">0</div>
+                            <div class="stat-label" data-i18n="admin_total_categories">Toplam Kategori</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">⭐</div>
+                        <div>
+                            <div class="stat-value" id="stat-featured">0</div>
+                            <div class="stat-label" data-i18n="admin_featured">Öne Çıkan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 20px; color: var(--navy-800);">Hızlı İşlemler</h3>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="showSection('products'); openProductModal();">+ Yeni Ürün Ekle</button>
+                        <button class="btn btn-outline" onclick="showSection('categories'); openCategoryModal();">+ Yeni Kategori</button>
+                        <button class="btn btn-outline" onclick="showSection('settings');">Ayarları Düzenle</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div id="section-products" class="admin-section" style="display:none;">
+                <div class="admin-header">
+                    <h1 data-i18n="admin_products">Ürünler</h1>
+                    <button class="btn btn-primary" onclick="openProductModal()">+ <span data-i18n="admin_add_product">Yeni Ürün</span></button>
+                </div>
+                <div style="background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width:60px" data-i18n="admin_image">Görsel</th>
+                                <th data-i18n="admin_name">Ürün Adı</th>
+                                <th data-i18n="admin_category">Kategori</th>
+                                <th data-i18n="admin_price">Fiyat</th>
+                                <th data-i18n="admin_featured_label">Öne Çıkan</th>
+                                <th data-i18n="admin_active">Aktif</th>
+                                <th data-i18n="admin_sort">Sıra</th>
+                                <th style="width:180px">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody">
+                            <tr><td colspan="8" style="text-align:center; padding: 40px;"><div class="spinner"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div id="section-categories" class="admin-section" style="display:none;">
+                <div class="admin-header">
+                    <h1 data-i18n="admin_categories">Kategoriler</h1>
+                    <button class="btn btn-primary" onclick="openCategoryModal()">+ <span data-i18n="admin_add_category">Yeni Kategori</span></button>
+                </div>
+                <div style="background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>TR</th>
+                                <th>EN</th>
+                                <th>DE</th>
+                                <th>Slug</th>
+                                <th data-i18n="admin_sort">Sıra</th>
+                                <th style="width:180px">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categories-tbody">
+                            <tr><td colspan="7" style="text-align:center; padding: 40px;"><div class="spinner"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div id="section-settings" class="admin-section" style="display:none;">
+                <div class="admin-header">
+                    <h1 data-i18n="admin_settings">Ayarlar</h1>
+                    <button class="btn btn-primary" onclick="saveSettings()">💾 <span data-i18n="admin_save">Kaydet</span></button>
+                </div>
+                <form id="settings-form" style="background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 24px; color: var(--navy-800);">Site Bilgileri</h3>
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="showSettingsLang('name', 'tr', this)">TR</button>
+                        <button type="button" class="tab-btn" onclick="showSettingsLang('name', 'en', this)">EN</button>
+                        <button type="button" class="tab-btn" onclick="showSettingsLang('name', 'de', this)">DE</button>
+                    </div>
+                    <div class="form-group" id="name-tr">
+                        <label>Site Adı (TR)</label>
+                        <input type="text" class="form-control" name="site_name_tr">
+                    </div>
+                    <div class="form-group" id="name-en" style="display:none;">
+                        <label>Site Name (EN)</label>
+                        <input type="text" class="form-control" name="site_name_en">
+                    </div>
+                    <div class="form-group" id="name-de" style="display:none;">
+                        <label>Seitentitel (DE)</label>
+                        <input type="text" class="form-control" name="site_name_de">
+                    </div>
+
+                    <div class="form-group" style="margin-top: 24px;">
+                        <label>Firma Logosu (Site Logo)</label>
+                        <label class="upload-area" for="logo-upload">
+                            <div class="icon">🖼️</div>
+                            <p>Sürükle & bırak veya tıkla</p>
+                        </label>
+                        <input type="file" id="logo-upload" accept="image/*" style="display: none;">
+                        <input type="hidden" name="site_logo" id="site_logo_input">
+                        <div id="logo-preview" class="upload-preview"></div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--gray-100); margin: 24px 0;">
+
+                    <h3 style="margin-bottom: 24px; color: var(--navy-800);">Hero Bölümü</h3>
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="showSettingsLang('hero', 'tr', this)">TR</button>
+                        <button type="button" class="tab-btn" onclick="showSettingsLang('hero', 'en', this)">EN</button>
+                        <button type="button" class="tab-btn" onclick="showSettingsLang('hero', 'de', this)">DE</button>
+                    </div>
+                    <div id="hero-tr">
+                        <div class="form-group">
+                            <label>Başlık (TR)</label>
+                            <input type="text" class="form-control" name="hero_title_tr">
+                        </div>
+                        <div class="form-group">
+                            <label>Alt Başlık (TR)</label>
+                            <textarea class="form-control" name="hero_subtitle_tr" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div id="hero-en" style="display:none;">
+                        <div class="form-group">
+                            <label>Title (EN)</label>
+                            <input type="text" class="form-control" name="hero_title_en">
+                        </div>
+                        <div class="form-group">
+                            <label>Subtitle (EN)</label>
+                            <textarea class="form-control" name="hero_subtitle_en" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div id="hero-de" style="display:none;">
+                        <div class="form-group">
+                            <label>Titel (DE)</label>
+                            <input type="text" class="form-control" name="hero_title_de">
+                        </div>
+                        <div class="form-group">
+                            <label>Untertitel (DE)</label>
+                            <textarea class="form-control" name="hero_subtitle_de" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 16px;">
+                        <label>Ana Sayfa Kapak Görseli (Hero Image)</label>
+                        <label class="upload-area" for="hero-upload">
+                            <div class="icon">📷</div>
+                            <p>Sürükle & bırak veya tıkla</p>
+                        </label>
+                        <input type="file" id="hero-upload" accept="image/*" style="display: none;">
+                        <input type="hidden" name="hero_image" id="hero_image_input">
+                        <div id="hero-preview" class="upload-preview"></div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--gray-100); margin: 24px 0;">
+
+                    <h3 style="margin-bottom: 24px; color: var(--navy-800);">İletişim Bilgileri</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label>Telefon</label>
+                            <input type="text" class="form-control" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label>E-posta</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                    </div>
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="showSettingsLang('addr', 'tr', this)">TR</button>
+                        <button type="button" class="tab-btn" onclick="showSettingsLang('addr', 'en', this)">EN</button>
+                        <button type="button" class="tab-btn" onclick="showSettingsLang('addr', 'de', this)">DE</button>
+                    </div>
+                    <div class="form-group" id="addr-tr">
+                        <label>Adres (TR)</label>
+                        <input type="text" class="form-control" name="address_tr">
+                    </div>
+                    <div class="form-group" id="addr-en" style="display:none;">
+                        <label>Address (EN)</label>
+                        <input type="text" class="form-control" name="address_en">
+                    </div>
+                    <div class="form-group" id="addr-de" style="display:none;">
+                        <label>Adresse (DE)</label>
+                        <input type="text" class="form-control" name="address_de">
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal omitted for brevity, but I must add it back -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title" data-i18n="admin_add_product">Yeni Ürün</h3>
+                <button class="modal-close" onclick="closeProductModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="showProductLang('name', 'tr', this)">TR</button>
+                        <button type="button" class="tab-btn" onclick="showProductLang('name', 'en', this)">EN</button>
+                        <button type="button" class="tab-btn" onclick="showProductLang('name', 'de', this)">DE</button>
+                    </div>
+                    <div class="form-group" id="pname-tr">
+                        <label>Ürün Adı (TR)</label>
+                        <input type="text" class="form-control" name="name_tr" required>
+                    </div>
+                    <div class="form-group" id="pname-en" style="display:none;">
+                        <label>Product Name (EN)</label>
+                        <input type="text" class="form-control" name="name_en">
+                    </div>
+                    <div class="form-group" id="pname-de" style="display:none;">
+                        <label>Produktname (DE)</label>
+                        <input type="text" class="form-control" name="name_de">
+                    </div>
+
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" onclick="showProductLang('desc', 'tr', this)">TR</button>
+                        <button type="button" class="tab-btn" onclick="showProductLang('desc', 'en', this)">EN</button>
+                        <button type="button" class="tab-btn" onclick="showProductLang('desc', 'de', this)">DE</button>
+                    </div>
+                    <div class="form-group" id="pdesc-tr">
+                        <label>Açıklama (TR)</label>
+                        <textarea class="form-control" name="description_tr" rows="3"></textarea>
+                    </div>
+                    <div class="form-group" id="pdesc-en" style="display:none;">
+                        <label>Description (EN)</label>
+                        <textarea class="form-control" name="description_en" rows="3"></textarea>
+                    </div>
+                    <div class="form-group" id="pdesc-de" style="display:none;">
+                        <label>Beschreibung (DE)</label>
+                        <textarea class="form-control" name="description_de" rows="3"></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label data-i18n="admin_category">Kategori</label>
+                            <select class="form-control" name="category_id"></select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="admin_price">Fiyat</label>
+                            <input type="text" class="form-control" name="price">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label data-i18n="admin_sort">Sıra</label>
+                            <input type="number" class="form-control" name="sort_order" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="admin_row">Satır</label>
+                            <input type="number" class="form-control" name="row_position" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="admin_col">Kolon</label>
+                            <input type="number" class="form-control" name="col_position" value="0">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 32px; margin-bottom: 20px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <div class="toggle">
+                                <input type="checkbox" name="is_featured">
+                                <span class="slider"></span>
+                            </div>
+                            <span data-i18n="admin_featured_label">Öne Çıkan Ürün</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <div class="toggle">
+                                <input type="checkbox" name="is_active" checked>
+                                <span class="slider"></span>
+                            </div>
+                            <span data-i18n="admin_active">Aktif</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="admin_image">Ana Görsel</label>
+                        <label class="upload-area" for="image-upload">
+                            <div class="icon">📷</div>
+                            <p data-i18n="admin_upload_desc">Sürükle & bırak veya tıkla</p>
+                        </label>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        <div id="image-preview" class="upload-preview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="admin_gallery">Galeri Görselleri</label>
+                        <label class="upload-area" for="gallery-upload" style="padding: 20px;">
+                            <p>+ Galeri görseli ekle</p>
+                        </label>
+                        <input type="file" id="gallery-upload" accept="image/*" multiple style="display: none;">
+                        <div id="gallery-preview" class="upload-preview"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeProductModal()" data-i18n="admin_cancel">İptal</button>
+                <button class="btn btn-primary" onclick="saveProduct()" data-i18n="admin_save">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal-overlay" id="category-modal">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 id="cat-modal-title" data-i18n="admin_add_category">Yeni Kategori</h3>
+                <button class="modal-close" onclick="closeCategoryModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="category-form">
+                    <div class="form-group">
+                        <label>Kategori Adı (TR)</label>
+                        <input type="text" class="form-control" name="cat_name_tr" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category Name (EN)</label>
+                        <input type="text" class="form-control" name="cat_name_en">
+                    </div>
+                    <div class="form-group">
+                        <label>Kategoriename (DE)</label>
+                        <input type="text" class="form-control" name="cat_name_de">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="admin_sort">Sıra</label>
+                        <input type="number" class="form-control" name="cat_sort_order" value="0">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeCategoryModal()" data-i18n="admin_cancel">İptal</button>
+                <button class="btn btn-primary" onclick="saveCategory()" data-i18n="admin_save">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/i18n.js?v=9"></script>
+    <script src="/static/js/app.js?v=9"></script>
+    <script src="/static/js/admin.js?v=9"></script>
+    <script>
+        function showProductLang(section, lang, btn) {
+            ['tr','en','de'].forEach(l => {
+                const el = document.getElementById(`p${section}-${l}`);
+                if (el) el.style.display = l === lang ? 'block' : 'none';
+            });
+            btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function showSettingsLang(section, lang, btn) {
+            ['tr','en','de'].forEach(l => {
+                const el = document.getElementById(`${section}-${l}`);
+                if (el) el.style.display = l === lang ? 'block' : 'none';
+            });
+            btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        async function logoutAdmin(e) {
+            e.preventDefault();
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

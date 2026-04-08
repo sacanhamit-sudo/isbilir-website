@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İşbilir Tekstil & Promosyon</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=9">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧵</text></svg>">
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <img src="/static/images/logo-dark.png" alt="İşbilir Tekstil" class="site-logo" >
+                
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" data-i18n="nav_home">Ana Sayfa</a></li>
+                <li><a href="/products" data-i18n="nav_products">Ürünler</a></li>
+                <li><a href="/about" data-i18n="nav_about">Hakkımızda</a></li>
+                <li><a href="/contact" data-i18n="nav_contact">İletişim</a></li>
+                <li><a href="/admin" id="nav-admin" style="display:none;" data-i18n="nav_admin">Yönetim</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="tr">TR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="de">DE</button>
+                </div>
+                <a href="/login" id="nav-login" class="btn btn-primary btn-sm" data-i18n="nav_login">Giriş Yap</a>
+            </div>
+            <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+<header class="hero">
+        <div class="hero-content fade-in">
+            <div class="hero-text">
+                <h1 data-i18n="hero_title_1" id="hero-title">İşbilir <span class="text-gold highlight" data-i18n="hero_title_2">Tekstil</span></h1>
+                <p class="subtitle" data-i18n="hero_subtitle" id="hero-subtitle">Kalite ve Güvenin Dokunduğu Yer</p>
+                <div class="btn-group">
+                    <a href="/products" class="btn btn-primary btn-lg" data-i18n="hero_btn_products">Ürünlerimizi Keşfet</a>
+                    <a href="/contact" class="btn btn-secondary btn-lg" data-i18n="hero_btn_contact">Bizimle İletişime Geç</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="/static/uploads/hero-image.jpg" alt="İşbilir Tekstil" class="hero-right-image" id="hero-img">
+            </div>
+        </div>
+    </header>
+
+    <section class="section" style="background: var(--gray-50);">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="overline" data-i18n="products_overline">ÜRÜNLERİMİZ</span>
+                <h2 data-i18n="products_title">Geniş Ürün Yelpazemiz</h2>
+                <p data-i18n="products_subtitle">Her ihtiyaca uygun tekstil ve promosyon ürünleri</p>
+            </div>
+            <div id="featured-grid" class="products-grid"></div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/products" class="btn btn-outline" data-i18n="products_all_btn">Tüm Ürünleri Gör</a>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3>İşbilir Tekstil</h3>
+                <p style="color: rgba(255,255,255,0.6); margin-top: 16px; line-height: 1.8;">Kaliteli kumaş, uzman işçilik ve yaratıcı tasarımlarla firmanıza değer katıyoruz.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_links">Hızlı Erişim</h4>
+                <ul class="footer-links">
+                    <li><a href="/" data-i18n="nav_home">Ana Sayfa</a></li>
+                    <li><a href="/products" data-i18n="nav_products">Ürünler</a></li>
+                    <li><a href="/about" data-i18n="nav_about">Hakkımızda</a></li>
+                    <li><a href="/contact" data-i18n="nav_contact">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_categories">Kategoriler</h4>
+                <ul class="footer-links" id="footer-categories"></ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer_contact">İletişim</h4>
+                <ul class="footer-contact">
+                    <li>📞 +90 555 123 4567</li>
+                    <li>✉️ info@isbilirtekstil.com</li>
+                    <li>📍 İstanbul, Türkiye</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 İşbilir Tekstil. <span data-i18n="footer_rights">Tüm hakları saklıdır.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/i18n.js?v=9"></script>
+    <script src="/static/js/app.js?v=9"></script>
+    <script>
+        api('/api/categories').then(cats => {
+            const el = document.getElementById('footer-categories');
+            if (el) el.innerHTML = cats.map(c =>
+                `<li><a href="/products?cat=${c.slug}">${getLangField(c, 'name')}</a></li>`
+            ).join('');
+        }).catch(err => console.log(err));
+    </script>
+</body>
+</html>
