@@ -1452,3 +1452,52 @@ select.form-control {
 .page-header p {
     margin-top: 16px !important;
 }
+
+/* ─── About Content ──────────────────────────────────────── */
+
+.about-container {
+    max-width: 820px;
+}
+
+.about-content .section-header {
+    margin-bottom: 24px;
+}
+
+.about-content p {
+    line-height: 1.8;
+    margin-bottom: 18px;
+}
+
+.about-lead {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.about-subtitle {
+    margin: 40px 0 16px;
+    font-size: 1.5rem;
+}
+
+.about-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+}
+
+.about-features li {
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    line-height: 1.7;
+    background: var(--white);
+    border-left: 4px solid var(--gold-400);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+}
+
+.about-tagline {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--gold-400);
+}
