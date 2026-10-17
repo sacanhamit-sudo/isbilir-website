@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İşbilir Tekstil & Promosyon</title>
-    <link rel="stylesheet" href="/static/css/style.css?v=9">
+    <link rel="stylesheet" href="/static/css/style.css?v=11">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧵</text></svg>">
     
 </head>
@@ -33,20 +33,9 @@
             <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
         </div>
     </nav>
-<header class="hero">
-        <div class="hero-content fade-in">
-            <div class="hero-text">
-                <h1 data-i18n="hero_title_1" id="hero-title">İşbilir <span class="text-gold highlight" data-i18n="hero_title_2">Tekstil</span></h1>
-                <p class="subtitle" data-i18n="hero_subtitle" id="hero-subtitle">Kalite ve Güvenin Dokunduğu Yer</p>
-                <div class="btn-group">
-                    <a href="/products" class="btn btn-primary btn-lg" data-i18n="hero_btn_products">Ürünlerimizi Keşfet</a>
-                    <a href="/contact" class="btn btn-secondary btn-lg" data-i18n="hero_btn_contact">Bizimle İletişime Geç</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <img src="/static/uploads/hero-image.jpg" alt="İşbilir Tekstil" class="hero-right-image" id="hero-img">
-            </div>
-        </div>
+<header class="hero-banner">
+        <img src="/static/images/ishbee-hero-banner.webp" alt="ISHBEE - Smart Textile Solutions. Reliable Partnerships." class="hero-banner-img">
+        <a href="/contact" class="btn btn-primary btn-lg hero-banner-btn" data-i18n="hero_btn_quote">Get a Quote</a>
     </header>
 
     <section class="section" style="background: var(--gray-50);">
@@ -97,8 +86,8 @@
         </div>
     </footer>
 
-    <script src="/static/js/i18n.js?v=9"></script>
-    <script src="/static/js/app.js?v=9"></script>
+    <script src="/static/js/i18n.js?v=11"></script>
+    <script src="/static/js/app.js?v=11"></script>
     <script>
         api('/api/categories').then(cats => {
             const el = document.getElementById('footer-categories');

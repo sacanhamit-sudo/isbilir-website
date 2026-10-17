@@ -1501,3 +1501,34 @@ select.form-control {
     font-weight: 700;
     color: var(--gold-400);
 }
+
+/* ─── Hero Banner ────────────────────────────────────────── */
+
+.hero-banner {
+    position: relative;
+    margin-top: 72px;
+    line-height: 0;
+    background: #f3e9d2;
+}
+
+.hero-banner-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.hero-banner-btn {
+    position: absolute;
+    right: 5%;
+    bottom: 7%;
+    line-height: normal;
+}
+
+@media (max-width: 768px) {
+    .hero-banner-btn {
+        position: static;
+        display: block;
+        width: fit-content;
+        margin: 16px auto;
+    }
+}
